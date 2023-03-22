@@ -29,7 +29,7 @@ class CardView: UIView {
         let translation = gesture.translation(in: nil)
         print(translation.x)
         
-        self.transform = CGAffineTransform(translationX: <#T##CGFloat#>, y: <#T##CGFloat#>)
+        self.transform = CGAffineTransform(translationX: , y: <#T##CGFloat#>)
     }
     
     required init?(coder: NSCoder) {
