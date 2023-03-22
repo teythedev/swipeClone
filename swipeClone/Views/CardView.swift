@@ -23,11 +23,7 @@ class CardView: UIView {
         addGestureRecognizer(panGesture)
         
     }
-    
-    
-    
-   
-    
+
     @objc fileprivate func handlePan(gesture: UIPanGestureRecognizer) {
         switch gesture.state {
         case .changed:
@@ -41,14 +37,28 @@ class CardView: UIView {
     
     fileprivate func handleChanged(_ gesture: UIPanGestureRecognizer) {
         let translation = gesture.translation(in: nil)
-        self.transform = CGAffineTransform(translationX: translation.x, y: translation.y)
+
+        let degrees: CGFloat = translation.x / 20
+        let angle = degrees * .pi / 180
+        
+        let rotationalTransformation = CGAffineTransform(rotationAngle: angle)
+        self.transform = rotationalTransformation.translatedBy(x: translation.x, y: translation.y)
     }
     
     fileprivate func handleEnded() {
+        let shouldDismissCard = true
+        
         UIView.animate(withDuration: 0.75, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.1, options: .curveEaseOut) {
-            self.transform = .identity
+            if shouldDismissCard {
+                self.frame = CGRect(x: 1000, y: 0, width: self.frame.width, height: self.frame.height)
+//                let offScreenTransform = self.transform.translatedBy(x: 1800, y: 0)
+//                self.transform = offScreenTransform
+            } else {
+                self.transform = .identity
+            }
         } completion: { _ in
-            
+            self.transform = .identity
+            //self.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height)
         }
     }
     
@@ -56,5 +66,5 @@ class CardView: UIView {
         fatalError()
     }
     
-
+    // TODO: - Dakika 14:05 te kaldim
 }
