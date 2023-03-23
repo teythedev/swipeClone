@@ -7,9 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AB0E803129CC447100B5903D /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0E803029CC447100B5903D /* User.swift */; };
+		AB0E803529CC65B700B5903D /* CardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0E803429CC65B700B5903D /* CardViewModel.swift */; };
+		AB0E803729CC770000B5903D /* Advertiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0E803629CC770000B5903D /* Advertiser.swift */; };
+		AB0E803929CC7BD800B5903D /* Extensions+CardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0E803829CC7BD800B5903D /* Extensions+CardViewModel.swift */; };
 		AB6C4E0429CAD759009EB4DB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB6C4E0329CAD759009EB4DB /* AppDelegate.swift */; };
 		AB6C4E0629CAD759009EB4DB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB6C4E0529CAD759009EB4DB /* SceneDelegate.swift */; };
-		AB6C4E0829CAD759009EB4DB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB6C4E0729CAD759009EB4DB /* ViewController.swift */; };
+		AB6C4E0829CAD759009EB4DB /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB6C4E0729CAD759009EB4DB /* HomeController.swift */; };
 		AB6C4E0B29CAD759009EB4DB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AB6C4E0929CAD759009EB4DB /* Main.storyboard */; };
 		AB6C4E0D29CAD759009EB4DB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AB6C4E0C29CAD759009EB4DB /* Assets.xcassets */; };
 		AB6C4E1029CAD759009EB4DB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AB6C4E0E29CAD759009EB4DB /* LaunchScreen.storyboard */; };
@@ -20,10 +24,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AB0E803029CC447100B5903D /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		AB0E803429CC65B700B5903D /* CardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewModel.swift; sourceTree = "<group>"; };
+		AB0E803629CC770000B5903D /* Advertiser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Advertiser.swift; sourceTree = "<group>"; };
+		AB0E803829CC7BD800B5903D /* Extensions+CardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extensions+CardViewModel.swift"; sourceTree = "<group>"; };
 		AB6C4E0029CAD759009EB4DB /* swipeClone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = swipeClone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB6C4E0329CAD759009EB4DB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AB6C4E0529CAD759009EB4DB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		AB6C4E0729CAD759009EB4DB /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		AB6C4E0729CAD759009EB4DB /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		AB6C4E0A29CAD759009EB4DB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		AB6C4E0C29CAD759009EB4DB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AB6C4E0F29CAD759009EB4DB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -45,6 +53,31 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AB0E802F29CC446600B5903D /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				AB0E803029CC447100B5903D /* User.swift */,
+				AB0E803629CC770000B5903D /* Advertiser.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		AB0E803229CC63B200B5903D /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				AB6C4E0729CAD759009EB4DB /* HomeController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		AB0E803329CC65A700B5903D /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				AB0E803429CC65B700B5903D /* CardViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 		AB6C4DF729CAD758009EB4DB = {
 			isa = PBXGroup;
 			children = (
@@ -64,11 +97,13 @@
 		AB6C4E0229CAD759009EB4DB /* swipeClone */ = {
 			isa = PBXGroup;
 			children = (
-				AB6C4E1A29CB0EB5009EB4DB /* Views */,
+				AB0E803329CC65A700B5903D /* ViewModels */,
 				AB6C4E1729CAD96A009EB4DB /* Extensions */,
-				AB6C4E0329CAD759009EB4DB /* AppDelegate.swift */,
+				AB0E802F29CC446600B5903D /* Model */,
+				AB6C4E1A29CB0EB5009EB4DB /* Views */,
+				AB0E803229CC63B200B5903D /* Controllers */,
 				AB6C4E0529CAD759009EB4DB /* SceneDelegate.swift */,
-				AB6C4E0729CAD759009EB4DB /* ViewController.swift */,
+				AB6C4E0329CAD759009EB4DB /* AppDelegate.swift */,
 				AB6C4E0929CAD759009EB4DB /* Main.storyboard */,
 				AB6C4E0C29CAD759009EB4DB /* Assets.xcassets */,
 				AB6C4E0E29CAD759009EB4DB /* LaunchScreen.storyboard */,
@@ -81,6 +116,7 @@
 			isa = PBXGroup;
 			children = (
 				AB6C4E1829CAD9AC009EB4DB /* Extensions+UIView.swift */,
+				AB0E803829CC7BD800B5903D /* Extensions+CardViewModel.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -166,13 +202,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AB0E803729CC770000B5903D /* Advertiser.swift in Sources */,
 				AB6C4E2029CB50E6009EB4DB /* CardView.swift in Sources */,
-				AB6C4E0829CAD759009EB4DB /* ViewController.swift in Sources */,
+				AB6C4E0829CAD759009EB4DB /* HomeController.swift in Sources */,
 				AB6C4E0429CAD759009EB4DB /* AppDelegate.swift in Sources */,
 				AB6C4E1C29CB0EEA009EB4DB /* HomeBottomControlsStackView.swift in Sources */,
+				AB0E803129CC447100B5903D /* User.swift in Sources */,
 				AB6C4E1E29CB1550009EB4DB /* TopNavigationStackView.swift in Sources */,
 				AB6C4E1929CAD9AC009EB4DB /* Extensions+UIView.swift in Sources */,
 				AB6C4E0629CAD759009EB4DB /* SceneDelegate.swift in Sources */,
+				AB0E803529CC65B700B5903D /* CardViewModel.swift in Sources */,
+				AB0E803929CC7BD800B5903D /* Extensions+CardViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
