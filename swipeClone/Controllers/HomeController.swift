@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+// TODO: - 14:40da kaldim
 class HomeController: UIViewController {
     
     let topStackView = TopNavigationStackView()
@@ -15,8 +15,8 @@ class HomeController: UIViewController {
         
     let cardViewModels: [CardViewModel] = {
         let producers: [ProducesCardViewModel] = [
-            User(name: "Kelly", profession: "Music DJ", age: 23, imageName: "lady5c"),
-            User(name: "Jane", profession: "Teacher", age: 18, imageName: "lady4c"),
+            User(name: "Kelly", profession: "Music DJ", age: 23, imageNames: ["kelly1","kelly2","kelly3"]),
+            User(name: "Jane", profession: "Teacher", age: 18, imageNames: ["jane1","jane2","jane3"]),
             Advertiser(title: "Slide out Menu", brandName: "Let's Build That App", posterPhotoName: "slide_out_menu_poster"),
         ]
         let viewModels =  producers.map { $0.toCardViewModel()}
