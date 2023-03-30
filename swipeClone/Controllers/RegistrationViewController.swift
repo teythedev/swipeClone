@@ -8,6 +8,8 @@
 import UIKit
 import FirebaseAuth
 import JGProgressHUD
+import FirebaseStorage
+
 extension RegistrationViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate{
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         let image = info[.originalImage] as? UIImage
@@ -60,7 +62,7 @@ class RegistrationViewController: UIViewController {
         let tf  = CustomTextField(padding: 24, height: 50)
         tf.placeholder = "Enter password"
         tf.addTarget(self, action: #selector(handleTextChanged), for: .editingChanged)
-        tf.isSecureTextEntry = true
+        //        tf.isSecureTextEntry = true
         return tf
     }()
     
@@ -113,6 +115,15 @@ class RegistrationViewController: UIViewController {
         }
         registrationViewModel.bindableImage.bind {[weak self] image in
             self?.selectPhotoButton.setImage(image?.withRenderingMode(.alwaysOriginal), for: .normal)
+        }
+        
+        registrationViewModel.bindableIsRegistering.bind { [weak self] isRegistering in
+            if isRegistering ?? false {
+                self?.registeringHUD.textLabel.text = "Register"
+                self?.registeringHUD.show(in: self?.view ?? UIView())
+            } else {
+                self?.registeringHUD.dismiss()
+            }
         }
     }
     
@@ -173,9 +184,9 @@ class RegistrationViewController: UIViewController {
     
     fileprivate lazy var overallStackView = UIStackView(
         arrangedSubviews: [
-        selectPhotoButton,
-        verticalStackView
-    ])
+            selectPhotoButton,
+            verticalStackView
+        ])
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         if self.traitCollection.verticalSizeClass == .compact {
@@ -186,7 +197,7 @@ class RegistrationViewController: UIViewController {
             selectPhotoButtonWidthAnchor.isActive = true
         } else {
             overallStackView.axis = .vertical
-           // verticalStackView.distribution = .fillEqually
+            // verticalStackView.distribution = .fillEqually
             selectPhotoButtonWidthAnchor.isActive = false
             selectPhotoButtonHeightAnchor.isActive = true
         }
@@ -199,7 +210,7 @@ class RegistrationViewController: UIViewController {
         overallStackView.axis = .vertical
         
         //overallStackView.distribution = .fill
-    
+        
         overallStackView.spacing = 8
         
         overallStackView.anchor(
@@ -227,23 +238,22 @@ class RegistrationViewController: UIViewController {
         gradientLayer.frame = view.bounds
     }
     
+    let registeringHUD = JGProgressHUD(style: .dark)
+    
+    
     @objc fileprivate func handleRegister() {
         self.handleTapDismiss()
-        print("REgister our user in firebase Auth")
-        guard let email = emailTextField.text , let password = passwordTextField.text else {return}
-        Auth.auth().createUser(withEmail: email, password: password) { result, error in
+        registrationViewModel.performRegistration { [weak self] error in
             if let error = error {
-                
-                self.showHUDWithError(error: error)
-
-                
-                //return
+                self?.showHUDWithError(error: error)
+                return
             }
-            print("Successfully registered user: \(result?.user.uid ?? "")")
+            print("Finished registering our user")
         }
     }
     
     fileprivate func showHUDWithError(error: Error) {
+        registeringHUD.dismiss()
         let hud = JGProgressHUD(style: .dark)
         hud.textLabel.text = "Failed Registration"
         hud.detailTextLabel.text = error.localizedDescription
