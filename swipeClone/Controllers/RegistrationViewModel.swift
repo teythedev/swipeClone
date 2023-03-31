@@ -8,6 +8,8 @@
 import UIKit
 import FirebaseAuth
 import FirebaseStorage
+import FirebaseFirestore
+import FirebaseFirestoreSwift
 
 
 
@@ -48,10 +50,11 @@ final class RegistrationViewModel {
                     return
                 }
                 self?.bindableIsRegistering.value = false
-                completion(nil)
+                
             }
         }
     }
+    
     fileprivate func uploadImage(completion: @escaping (Error?) -> ()) {
         let fileName = UUID().uuidString
         let ref = Storage.storage().reference(withPath: "/images/\(fileName)")
@@ -69,8 +72,22 @@ final class RegistrationViewModel {
                 }
                 
                 print("Download url of our image is: \(url?.absoluteString ?? "")")
-                completion(nil)
+                
+                let imageUrl = url?.absoluteString ?? ""
+                self.saveInfoToFireStore(imageUrl: imageUrl , completion: completion)
             }
+        }
+    }
+    
+    fileprivate func saveInfoToFireStore(imageUrl: String, completion: @escaping (Error?) -> ()) {
+        let uid = Auth.auth().currentUser?.uid ?? ""
+        let docData = ["fullName" : fullName ?? "", "uid" : uid, "imageUrl1": imageUrl]
+        Firestore.firestore().collection("users").document(uid).setData(docData) { error in
+            if let error = error {
+                completion(error)
+                return
+            }
+            completion(nil)
         }
     }
     
