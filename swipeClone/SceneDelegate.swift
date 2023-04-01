@@ -20,7 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow()
         window?.windowScene = scene
         window?.makeKeyAndVisible()
-        window?.rootViewController = RegistrationViewController()
+        window?.rootViewController = HomeController()
         
     }
 

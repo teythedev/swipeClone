@@ -6,39 +6,54 @@
 //
 
 import UIKit
-// TODO: - 14:40da kaldim
+import FirebaseFirestore
+
+
 class HomeController: UIViewController {
     
     let topStackView = TopNavigationStackView()
     let cardsDeckView = UIView()
     let buttonsStackView = HomeBottomControlsStackView()
         
-    let cardViewModels: [CardViewModel] = {
-        let producers: [ProducesCardViewModel] = [
-            User(name: "Kelly", profession: "Music DJ", age: 23, imageNames: ["kelly1","kelly2","kelly3"]),
-            User(name: "Jane", profession: "Teacher", age: 18, imageNames: ["jane1","jane2","jane3"]),
-            Advertiser(title: "Slide out Menu", brandName: "Let's Build That App", posterPhotoName: "slide_out_menu_poster"),
-        ]
-        let viewModels =  producers.map { $0.toCardViewModel()}
-        return viewModels
-    }()
+    var cardViewModels = [CardViewModel]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         topStackView.settingsButton.addTarget(self, action: #selector(handleSettings), for: .touchUpInside)
         setupLayout()
-        setupDummyCards()
+        setupFirestoreUserCards()
+        fetchUsersFromFireStore()
     }
     
     // MARK: - Fileprivate
+    
+    fileprivate func fetchUsersFromFireStore() {
+        let query = Firestore.firestore().collection("users")
+        //let query = Firestore.firestore().collection("users").whereField("friends", arrayContains: "Chris")
+        query.getDocuments { snapshot, error in
+            if let error = error {
+                print("Failed to fetch users: \(error.localizedDescription)")
+                    return
+            }
+            
+            snapshot?.documents.forEach({ documentSnapshot in
+                let userDictionary = documentSnapshot.data()
+                let user = User(dictionary: userDictionary)
+                self.cardViewModels.append(user.toCardViewModel())
+            })
+            self.setupFirestoreUserCards()
+            
+        }
+    }
+    
     
     @objc func handleSettings() {
         print("Show registration page")
         present(RegistrationViewController(), animated: true)
     }
     
-    fileprivate func setupDummyCards() {
+    fileprivate func setupFirestoreUserCards() {
         (cardViewModels).forEach { cardViewModel in
             let cardView = CardView()
             cardView.cardViewModel = cardViewModel
@@ -48,6 +63,7 @@ class HomeController: UIViewController {
     }
     
     fileprivate func setupLayout() {
+        view.backgroundColor = .systemBackground
         let overallStackView = UIStackView(arrangedSubviews: [
             topStackView,
             cardsDeckView,
