@@ -34,19 +34,8 @@ final class CardView: UIView {
             
         }
     }
-    fileprivate func setupImageIndexObserver() {
-        cardViewModel.imageIndexObserver = { [weak self] index,imageUrl in
-            if let url = URL(string: imageUrl ?? "")  {
-                self?.imageView.sd_setImage(with: url)
-            }
-            self?.barsStackView.arrangedSubviews.forEach { v in
-                v.backgroundColor = self?.barDeselectedColor
-            }
-            self?.barsStackView.arrangedSubviews[index].backgroundColor = .white
-           
-        }
-    }
     
+    fileprivate let barsStackView = UIStackView()
     fileprivate let imageView = UIImageView(image: UIImage())
     fileprivate let gradientLayer = CAGradientLayer()
     fileprivate let informationLabel = UILabel()
@@ -65,17 +54,6 @@ final class CardView: UIView {
         addGestureRecognizer(panGesture)
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap)))
         
-    }
-    
-    @objc fileprivate func handleTap(gesture: UITapGestureRecognizer){
-        print("handling tap and cycling photos")
-        let tapLocation = gesture.location(in: nil)
-        let shouldAdvanceNextPhoto = tapLocation.x > frame.width / 2
-        if shouldAdvanceNextPhoto {
-            cardViewModel.advanceToNextPhoto()
-        }else {
-            cardViewModel.goToPreviousPhoto()
-        }
     }
     
     required init?(coder: NSCoder) {
@@ -112,8 +90,7 @@ final class CardView: UIView {
         informationLabel.font = UIFont.systemFont(ofSize: 34, weight: .heavy)
         informationLabel.numberOfLines = 0
     }
-    
-    fileprivate let barsStackView = UIStackView()
+
     
     fileprivate func setupBarStackView() {
         addSubview(barsStackView)
@@ -122,6 +99,20 @@ final class CardView: UIView {
         barsStackView.spacing = 4
         barsStackView.distribution = .fillEqually
         
+    }
+    
+    
+    fileprivate func setupImageIndexObserver() {
+        cardViewModel.imageIndexObserver = { [weak self] index,imageUrl in
+            if let url = URL(string: imageUrl ?? "")  {
+                self?.imageView.sd_setImage(with: url)
+            }
+            self?.barsStackView.arrangedSubviews.forEach { v in
+                v.backgroundColor = self?.barDeselectedColor
+            }
+            self?.barsStackView.arrangedSubviews[index].backgroundColor = .white
+           
+        }
     }
     
     @objc fileprivate func handlePan(gesture: UIPanGestureRecognizer) {
@@ -176,6 +167,17 @@ final class CardView: UIView {
             if shouldDismissCard {
                 self.removeFromSuperview()
             }
+        }
+    }
+    
+    @objc fileprivate func handleTap(gesture: UITapGestureRecognizer){
+        print("handling tap and cycling photos")
+        let tapLocation = gesture.location(in: nil)
+        let shouldAdvanceNextPhoto = tapLocation.x > frame.width / 2
+        if shouldAdvanceNextPhoto {
+            cardViewModel.advanceToNextPhoto()
+        }else {
+            cardViewModel.goToPreviousPhoto()
         }
     }
     

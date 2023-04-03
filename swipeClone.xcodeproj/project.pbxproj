@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AB0D8BDC29D838FC00FBFF8C /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0D8BDB29D838FC00FBFF8C /* SettingsController.swift */; };
 		AB0E803129CC447100B5903D /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0E803029CC447100B5903D /* User.swift */; };
 		AB0E803529CC65B700B5903D /* CardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0E803429CC65B700B5903D /* CardViewModel.swift */; };
 		AB0E803729CC770000B5903D /* Advertiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0E803629CC770000B5903D /* Advertiser.swift */; };
@@ -35,6 +36,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AB0D8BDB29D838FC00FBFF8C /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
 		AB0E803029CC447100B5903D /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		AB0E803429CC65B700B5903D /* CardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewModel.swift; sourceTree = "<group>"; };
 		AB0E803629CC770000B5903D /* Advertiser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Advertiser.swift; sourceTree = "<group>"; };
@@ -89,8 +91,8 @@
 			children = (
 				AB6C4E0729CAD759009EB4DB /* HomeController.swift */,
 				ABF67AFC29CE40B500946F2F /* RegistrationViewController.swift */,
-				ABAB656429D4115C00077B0D /* RegistrationViewModel.swift */,
 				ABAB657729D4735500077B0D /* Bindable.swift */,
+				AB0D8BDB29D838FC00FBFF8C /* SettingsController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -99,6 +101,7 @@
 			isa = PBXGroup;
 			children = (
 				AB0E803429CC65B700B5903D /* CardViewModel.swift */,
+				ABAB656429D4115C00077B0D /* RegistrationViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -251,6 +254,7 @@
 				ABAB657829D4735500077B0D /* Bindable.swift in Sources */,
 				AB6C4E0429CAD759009EB4DB /* AppDelegate.swift in Sources */,
 				AB6C4E1C29CB0EEA009EB4DB /* HomeBottomControlsStackView.swift in Sources */,
+				AB0D8BDC29D838FC00FBFF8C /* SettingsController.swift in Sources */,
 				AB0E803129CC447100B5903D /* User.swift in Sources */,
 				ABF67AFD29CE40B500946F2F /* RegistrationViewController.swift in Sources */,
 				AB6C4E1E29CB1550009EB4DB /* TopNavigationStackView.swift in Sources */,

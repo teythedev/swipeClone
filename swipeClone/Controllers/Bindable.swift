@@ -7,7 +7,7 @@
 
 import Foundation
 
-class Bindable<T> {
+final class Bindable<T> {
     var value: T? {
         didSet {
             observer?(value)
