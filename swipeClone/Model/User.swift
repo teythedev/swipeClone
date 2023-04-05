@@ -13,13 +13,17 @@ struct User: ProducesCardViewModel {
     var profession: String?
     var age: Int?
     var imageUrl1: String?
+    var imageUrl2: String?
+    var imageUrl3: String?
     var uid: String?
     
     init(dictionary: [String: Any]) {
         self.profession = dictionary["profession"] as? String
         self.age = dictionary["age"] as? Int
         self.name = dictionary["fullName"] as? String ?? ""
-        self.imageUrl1 = dictionary["imageUrl1"] as? String ?? ""
+        self.imageUrl1 = dictionary["imageUrl1"] as? String
+        self.imageUrl2 = dictionary["imageUrl2"] as? String
+        self.imageUrl3 = dictionary["imageUrl3"] as? String
         self.uid = dictionary["uid"] as? String ?? ""
     }
     

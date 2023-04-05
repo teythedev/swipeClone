@@ -22,6 +22,10 @@ final class HomeController: UIViewController {
         super.viewDidLoad()
         
         topStackView.settingsButton.addTarget(self, action: #selector(handleSettings), for: .touchUpInside)
+        
+        
+        topStackView.messageButton.addTarget(self, action: #selector(handleMessages), for: .touchUpInside)
+        
         bottomControls.refreshButton.addTarget(self, action: #selector(handleRefresh), for: .touchUpInside)
         setupLayout()
         fetchUsersFromFireStore()
@@ -87,6 +91,11 @@ final class HomeController: UIViewController {
         let navigationController = UINavigationController(rootViewController: settingsController)
         navigationController.modalPresentationStyle = .fullScreen
         present(navigationController, animated: true)
+    }
+    
+    @objc func handleMessages() {
+        let vc = RegistrationViewController()
+        present(vc, animated:  true)
     }
     
     @objc fileprivate func handleRefresh() {
