@@ -11,13 +11,17 @@ import FirebaseStorage
 import JGProgressHUD
 import SDWebImage
 
+protocol SettingsControllerDelegate {
+    func didSaveSettings()
+}
+
 final class CustomImagePickerController: UIImagePickerController {
-    
     var imageButton: UIButton?
-    
 }
 
 final class SettingsController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    var delegate: SettingsControllerDelegate?
     
     lazy var image1Button = createButton(selector: #selector(handleSelectPhoto))
     lazy var image2Button = createButton(selector: #selector(handleSelectPhoto))
@@ -105,21 +109,11 @@ final class SettingsController: UITableViewController, UIImagePickerControllerDe
     
     
     fileprivate func fetchCurrentUser() {
-        guard let uid = Auth.auth().currentUser?.uid else {return}
-        Firestore.firestore().collection("users").document(uid).getDocument { snapshot, error in
-            if let error = error {
-                print(error)
-                return
-            }
-            
-            // Fetched user
-            guard let dictionary = snapshot?.data() else {return}
-            self.user = User(dictionary: dictionary)
-            
+        AuthService.shared.getCurrentUser(completion: { user in
+            self.user = user
             self.loadUserPhotos()
             self.tableView.reloadData()
-            
-        }
+        })
     }
     
     fileprivate func loadUserPhotos() {
@@ -138,7 +132,6 @@ final class SettingsController: UITableViewController, UIImagePickerControllerDe
                 self.image3Button.setImage(image?.withRenderingMode(.alwaysOriginal), for: .normal)
             }
         } else {return}
-       
     }
     
     fileprivate func setupNavigationItem() {
@@ -147,8 +140,13 @@ final class SettingsController: UITableViewController, UIImagePickerControllerDe
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
         navigationItem.rightBarButtonItems = [
             UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(handleSave)),
-            UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(handleCancel))
+            UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(handleLogout))
         ]
+    }
+    
+    @objc fileprivate func handleLogout() {
+        try? Auth.auth().signOut()
+        dismiss(animated: true)
     }
     
     @objc fileprivate func handleSave() {
@@ -161,8 +159,9 @@ final class SettingsController: UITableViewController, UIImagePickerControllerDe
             "imageUrl2": user?.imageUrl2 ?? "",
             "imageUrl3": user?.imageUrl3 ?? "",
             "age": user?.age ?? -1,
-            "profession": user?.profession ?? ""
-            
+            "profession": user?.profession ?? "",
+            "minSeekingAge": user?.minSeekingAge ?? -1,
+            "maxSeekingAge": user?.maxSeekingAge ?? -1,
         ]
         let hud  = JGProgressHUD(style: .dark)
         hud.textLabel.text = "Saving Profiles"
@@ -174,6 +173,10 @@ final class SettingsController: UITableViewController, UIImagePickerControllerDe
                 return
             }
             print("Finished saving info")
+            self.dismiss(animated: true) {
+                self.delegate?.didSaveSettings()
+                print("Dissmissal complete")
+            }
         }
     }
     
@@ -208,17 +211,17 @@ final class SettingsController: UITableViewController, UIImagePickerControllerDe
         switch section {
         case 1:
             headerLabel.text = "Name"
-            return headerLabel
         case 2:
             headerLabel.text = "Profession"
-            return headerLabel
         case 3:
             headerLabel.text = "Age"
-            return headerLabel
-        default:
+        case 4:
             headerLabel.text = "Bio"
-            return headerLabel
+        default:
+            headerLabel.text = "Seeking Age Range"
         }
+        headerLabel.font = UIFont.systemFont(ofSize: 16)
+        return headerLabel
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -235,7 +238,46 @@ final class SettingsController: UITableViewController, UIImagePickerControllerDe
         return 1
     }
     
+    @objc fileprivate func handleMinAgeChange(slider: UISlider) {
+        let indexPath: IndexPath = .init(row: 0, section: 5)
+        if let ageRangeCell = tableView.cellForRow(at: indexPath) as? AgeRangeCell {
+            if slider.value >= ageRangeCell.maxSlider.value {
+                ageRangeCell.maxSlider.setValue(slider.value, animated: true)
+                ageRangeCell.maxLabel.text = "Max: \(Int(slider.value))"
+            }
+            ageRangeCell.minLabel.text = "Min: \(Int(slider.value))"
+            self.user?.minSeekingAge = Int(slider.value)
+        }
+        
+    }
+    @objc fileprivate func handleMaxAgeChange(slider: UISlider) {
+        let indexPath: IndexPath = .init(row: 0, section: 5)
+        if let ageRangeCell = tableView.cellForRow(at: indexPath) as? AgeRangeCell {
+            
+            if slider.value > ageRangeCell.minSlider.value {
+                ageRangeCell.maxLabel.text = "Max: \(Int(slider.value))"
+            }else {
+                slider.setValue(ageRangeCell.minSlider.value, animated: false)
+            }
+            self.user?.maxSeekingAge = Int(slider.value)
+        }
+    }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+
+        if indexPath.section == 5 {
+            let ageRangecell = AgeRangeCell(style: .default, reuseIdentifier: nil)
+            ageRangecell.minSlider.addTarget(self, action: #selector(handleMinAgeChange), for: .valueChanged)
+            ageRangecell.maxSlider.addTarget(self, action: #selector(handleMaxAgeChange), for: .valueChanged)
+            
+            ageRangecell.minLabel.text = "Min: \(self.user?.minSeekingAge ?? -1)"
+            if let min = self.user?.minSeekingAge, let max = self.user?.maxSeekingAge {
+                ageRangecell.minSlider.setValue(Float(min), animated: false)
+                ageRangecell.maxSlider.setValue(Float(max), animated: false)
+            }
+            ageRangecell.maxLabel.text = "Max: \(self.user?.maxSeekingAge ?? -1)"
+            return ageRangecell
+        }
+        
         let cell = SettingsCell(style: .default, reuseIdentifier: nil)
         
         switch indexPath.section {
@@ -263,7 +305,7 @@ final class SettingsController: UITableViewController, UIImagePickerControllerDe
     
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 5
+        return 6
     }
     
     @objc fileprivate func handleNameChanged(textField: UITextField) {

@@ -7,7 +7,22 @@
 
 import UIKit
 import FirebaseFirestore
+import FirebaseAuth
 import JGProgressHUD
+
+extension HomeController: SettingsControllerDelegate {
+    func didSaveSettings() {
+        print("Notify dismissal from settings controller")
+        fetchCurrentUser()
+        fetchUsersFromFireStore()
+    }
+}
+extension HomeController: LoginControllerDelegate {
+    func didFinishLoggingIn() {
+        fetchCurrentUser()
+        
+    }
+}
 
 
 final class HomeController: UIViewController {
@@ -27,13 +42,35 @@ final class HomeController: UIViewController {
         topStackView.messageButton.addTarget(self, action: #selector(handleMessages), for: .touchUpInside)
         
         bottomControls.refreshButton.addTarget(self, action: #selector(handleRefresh), for: .touchUpInside)
+        
         setupLayout()
-        fetchUsersFromFireStore()
+        fetchCurrentUser()
+        //fetchUsersFromFireStore()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        print("HomeController did appear")
+        if Auth.auth().currentUser == nil {
+            let loginController = LoginController()
+            loginController.delegate = self
+            let navController = UINavigationController(rootViewController: loginController)
+            navController.modalPresentationStyle = .fullScreen
+            present(navController, animated: true)
+        }
+    }
 
     
     // MARK: - Setup
+    
+    fileprivate var user: User?
+    
+    fileprivate func fetchCurrentUser() {
+       AuthService.shared.getCurrentUser(completion: { user in
+           self.user = user
+           self.fetchUsersFromFireStore()
+        })
+    }
     
     fileprivate func setupLayout() {
         view.backgroundColor = .systemBackground
@@ -54,12 +91,13 @@ final class HomeController: UIViewController {
 
     fileprivate var lastFetchUser: User?
     fileprivate func fetchUsersFromFireStore() {
+        guard let minAge = user?.minSeekingAge, let maxAge = user?.maxSeekingAge else {return}
         let hud = JGProgressHUD(style: .dark)
         hud.textLabel.text = "Fetching Users"
         hud.show(in: view)
         //Pagination to page through 2 user at a time
         
-        let query = Firestore.firestore().collection("users").order(by: "uid").start(after: [lastFetchUser?.uid ?? ""]).limit(to: 2)
+        let query = Firestore.firestore().collection("users").whereField("age", isGreaterThanOrEqualTo: minAge).whereField("age", isLessThan: maxAge)//.order(by: "uid").start(after: [lastFetchUser?.uid ?? ""]).limit(to: 2)
         query.getDocuments { snapshot, error in
             hud.dismiss()
             if let error = error {
@@ -88,6 +126,7 @@ final class HomeController: UIViewController {
     // MARK: - Handles
     @objc func handleSettings() {
         let settingsController = SettingsController()
+        settingsController.delegate = self
         let navigationController = UINavigationController(rootViewController: settingsController)
         navigationController.modalPresentationStyle = .fullScreen
         present(navigationController, animated: true)
@@ -104,4 +143,5 @@ final class HomeController: UIViewController {
     
    
 }
+
 
