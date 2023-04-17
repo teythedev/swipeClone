@@ -20,7 +20,6 @@ extension HomeController: SettingsControllerDelegate {
 extension HomeController: LoginControllerDelegate {
     func didFinishLoggingIn() {
         fetchCurrentUser()
-        
     }
 }
 
@@ -52,9 +51,9 @@ final class HomeController: UIViewController {
         super.viewDidAppear(animated)
         print("HomeController did appear")
         if Auth.auth().currentUser == nil {
-            let loginController = LoginController()
-            loginController.delegate = self
-            let navController = UINavigationController(rootViewController: loginController)
+            let registerController = RegistrationViewController()
+            registerController.delegate = self
+            let navController = UINavigationController(rootViewController: registerController)
             navController.modalPresentationStyle = .fullScreen
             present(navController, animated: true)
         }
@@ -91,11 +90,14 @@ final class HomeController: UIViewController {
 
     fileprivate var lastFetchUser: User?
     fileprivate func fetchUsersFromFireStore() {
-        guard let minAge = user?.minSeekingAge, let maxAge = user?.maxSeekingAge else {return}
+       // guard let minAge = user?.minSeekingAge, let maxAge = user?.maxSeekingAge else {return}
         let hud = JGProgressHUD(style: .dark)
         hud.textLabel.text = "Fetching Users"
         hud.show(in: view)
         //Pagination to page through 2 user at a time
+        
+        let minAge = user?.minSeekingAge ?? SettingsController.defaultMinSeekingAge
+        let maxAge = user?.maxSeekingAge ?? SettingsController.defaultMaxSeekingAge
         
         let query = Firestore.firestore().collection("users").whereField("age", isGreaterThanOrEqualTo: minAge).whereField("age", isLessThan: maxAge)//.order(by: "uid").start(after: [lastFetchUser?.uid ?? ""]).limit(to: 2)
         query.getDocuments { snapshot, error in
@@ -108,15 +110,16 @@ final class HomeController: UIViewController {
             snapshot?.documents.forEach({ documentSnapshot in
                 let userDictionary = documentSnapshot.data()
                 let user = User(dictionary: userDictionary)
-                self.cardViewModels.append(user.toCardViewModel())
-                self.lastFetchUser = user
-                self.setupCardFromUser(user: user)
+                if user.uid != Auth.auth().currentUser?.uid {
+                    self.setupCardFromUser(user: user)
+                }
             })
         }
     }
     
     fileprivate func setupCardFromUser(user: User) {
         let cardView = CardView()
+        cardView.delegate = self
         cardView.cardViewModel = user.toCardViewModel()
         cardsDeckView.addSubview(cardView)
         cardsDeckView.sendSubviewToBack(cardView)
@@ -142,6 +145,15 @@ final class HomeController: UIViewController {
     }
     
    
+}
+
+extension HomeController: CardViewDelegate {
+    func didTapMoreInfo(cardViewModel: CardViewModel) {
+        let  userDetailsController = UserDetailsViewController()
+        userDetailsController.cardViewModel = cardViewModel
+        userDetailsController.modalPresentationStyle = .fullScreen
+        present(userDetailsController, animated: true)
+    }
 }
 
 

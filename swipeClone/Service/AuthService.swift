@@ -16,8 +16,10 @@ final class AuthService {
         
     }
     
+    
     func getCurrentUser(completion: @escaping (User?) -> Void) {
         guard let uid = Auth.auth().currentUser?.uid else {return}
+        
         Firestore.firestore().collection("users").document(uid).getDocument { snapshot, error in
             if let error = error {
                 print(error)

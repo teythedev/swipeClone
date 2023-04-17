@@ -12,7 +12,9 @@
 		AB0E803529CC65B700B5903D /* CardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0E803429CC65B700B5903D /* CardViewModel.swift */; };
 		AB0E803729CC770000B5903D /* Advertiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0E803629CC770000B5903D /* Advertiser.swift */; };
 		AB0E803929CC7BD800B5903D /* Extensions+CardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0E803829CC7BD800B5903D /* Extensions+CardViewModel.swift */; };
+		AB18467129E501CF00AC47CA /* UserDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB18467029E501CF00AC47CA /* UserDetailsViewController.swift */; };
 		AB28BE3F29D0807D002AF8FE /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB28BE3E29D0807D002AF8FE /* CustomTextField.swift */; };
+		AB3FB72D29E79B39002C7EAA /* SwipingPhotosController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB3FB72C29E79B39002C7EAA /* SwipingPhotosController.swift */; };
 		AB69705929DAF9C100EF57E3 /* SettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB69705829DAF9C100EF57E3 /* SettingsCell.swift */; };
 		AB6B33A029E0C55600076E65 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB6B339F29E0C55600076E65 /* AuthService.swift */; };
 		AB6B33A329E0D18B00076E65 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB6B33A229E0D18B00076E65 /* LoginController.swift */; };
@@ -46,7 +48,9 @@
 		AB0E803429CC65B700B5903D /* CardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewModel.swift; sourceTree = "<group>"; };
 		AB0E803629CC770000B5903D /* Advertiser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Advertiser.swift; sourceTree = "<group>"; };
 		AB0E803829CC7BD800B5903D /* Extensions+CardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extensions+CardViewModel.swift"; sourceTree = "<group>"; };
+		AB18467029E501CF00AC47CA /* UserDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsViewController.swift; sourceTree = "<group>"; };
 		AB28BE3E29D0807D002AF8FE /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
+		AB3FB72C29E79B39002C7EAA /* SwipingPhotosController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipingPhotosController.swift; sourceTree = "<group>"; };
 		AB69705829DAF9C100EF57E3 /* SettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCell.swift; sourceTree = "<group>"; };
 		AB6B339F29E0C55600076E65 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		AB6B33A229E0D18B00076E65 /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
@@ -99,6 +103,7 @@
 		AB0E803229CC63B200B5903D /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				AB18466F29E501B700AC47CA /* User Details */,
 				AB6B33A129E0D16500076E65 /* Login */,
 				AB6C4E0729CAD759009EB4DB /* HomeController.swift */,
 				ABF67AFC29CE40B500946F2F /* RegistrationViewController.swift */,
@@ -115,6 +120,15 @@
 				ABAB656429D4115C00077B0D /* RegistrationViewModel.swift */,
 			);
 			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		AB18466F29E501B700AC47CA /* User Details */ = {
+			isa = PBXGroup;
+			children = (
+				AB18467029E501CF00AC47CA /* UserDetailsViewController.swift */,
+				AB3FB72C29E79B39002C7EAA /* SwipingPhotosController.swift */,
+			);
+			path = "User Details";
 			sourceTree = "<group>";
 		};
 		AB6B339E29E0C54400076E65 /* Service */ = {
@@ -280,11 +294,13 @@
 				AB28BE3F29D0807D002AF8FE /* CustomTextField.swift in Sources */,
 				AB0E803729CC770000B5903D /* Advertiser.swift in Sources */,
 				AB6C4E2029CB50E6009EB4DB /* CardView.swift in Sources */,
+				AB3FB72D29E79B39002C7EAA /* SwipingPhotosController.swift in Sources */,
 				AB69705929DAF9C100EF57E3 /* SettingsCell.swift in Sources */,
 				ABAB656529D4115C00077B0D /* RegistrationViewModel.swift in Sources */,
 				AB6C4E0829CAD759009EB4DB /* HomeController.swift in Sources */,
 				AB6B33A029E0C55600076E65 /* AuthService.swift in Sources */,
 				ABAB657829D4735500077B0D /* Bindable.swift in Sources */,
+				AB18467129E501CF00AC47CA /* UserDetailsViewController.swift in Sources */,
 				AB6C4E0429CAD759009EB4DB /* AppDelegate.swift in Sources */,
 				AB6B33A329E0D18B00076E65 /* LoginController.swift in Sources */,
 				AB6C4E1C29CB0EEA009EB4DB /* HomeBottomControlsStackView.swift in Sources */,

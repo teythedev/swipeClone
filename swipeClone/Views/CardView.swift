@@ -8,21 +8,33 @@
 import UIKit
 import SDWebImage
 
+protocol CardViewDelegate {
+    func didTapMoreInfo(cardViewModel: CardViewModel)
+}
+
 final class CardView: UIView {
+    
+    var delegate: CardViewDelegate?
     
     var cardViewModel: CardViewModel! {
         didSet {
-            let imageName = cardViewModel.imageNames.first ?? ""
+  //          let imageName = cardViewModel.imageUrls.first ?? ""
             //load image from url
-            if let url = URL(string: imageName) {
-                imageView.sd_setImage(with: url)
-            }
+//             let url = URL(string: imageName)
+             
+                
+//                self.imageView.sd_setImage(
+//                    with: url,
+//                    placeholderImage: #imageLiteral(resourceName: "photo_placeholder"),
+//                    options: .continueInBackground
+//                )
+            swipingPhotosController.cardViewModel = cardViewModel
             
             informationLabel.attributedText = cardViewModel.attributedString
             informationLabel.textAlignment = cardViewModel.textAlignment
             
             
-            (0..<cardViewModel.imageNames.count).forEach { _ in
+            (0..<cardViewModel.imageUrls.count).forEach { _ in
                 let barView = UIView()
                 barView.backgroundColor = barDeselectedColor
                 barsStackView.addArrangedSubview(barView)
@@ -36,7 +48,9 @@ final class CardView: UIView {
     }
     
     fileprivate let barsStackView = UIStackView()
-    fileprivate let imageView = UIImageView(image: UIImage())
+//    fileprivate let imageView = UIImageView(image: UIImage())
+        // replace it UIPageViewController
+    fileprivate let swipingPhotosController = SwipingPhotosController(isCardViewMode: true)
     fileprivate let gradientLayer = CAGradientLayer()
     fileprivate let informationLabel = UILabel()
     
@@ -72,15 +86,32 @@ final class CardView: UIView {
         layer.addSublayer(gradientLayer)
     }
     
+    fileprivate let moreInfoButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: "info.circle.fill"), for: .normal)
+        button.tintColor = .white
+        button.addTarget(self, action: #selector(handleMoreInfo), for: .touchUpInside)
+        return button
+    }()
+    
+    @objc fileprivate func handleMoreInfo() {
+        delegate?.didTapMoreInfo(cardViewModel: self.cardViewModel)
+    }
+    
     fileprivate func setupLayout() {
         layer.cornerRadius = 10
         clipsToBounds = true
         
-        imageView.contentMode = .scaleAspectFill
-        addSubview(imageView)
-        imageView.fillSuperview()
         
-        setupBarStackView()
+        let swipingPhotosView = swipingPhotosController.view!
+        //imageView.contentMode = .scaleAspectFill
+        //addSubview(imageView)
+        addSubview(swipingPhotosView)
+        //imageView.fillSuperview()
+        swipingPhotosView.fillSuperview()
+        
+        
+      //  setupBarStackView()
         
         setupGradientLayer()
         
@@ -89,6 +120,10 @@ final class CardView: UIView {
         informationLabel.textColor = .white
         informationLabel.font = UIFont.systemFont(ofSize: 34, weight: .heavy)
         informationLabel.numberOfLines = 0
+        
+        addSubview(moreInfoButton)
+        moreInfoButton.anchor(top: nil, leading: nil, bottom: bottomAnchor, trailing: trailingAnchor, padding: .init(top: 0, left: 0, bottom: 16, right: 16), size: .init(width: 44, height: 44))
+        
     }
 
     
@@ -105,7 +140,7 @@ final class CardView: UIView {
     fileprivate func setupImageIndexObserver() {
         cardViewModel.imageIndexObserver = { [weak self] index,imageUrl in
             if let url = URL(string: imageUrl ?? "")  {
-                self?.imageView.sd_setImage(with: url)
+               // self?.imageView.sd_setImage(with: url, placeholderImage: #imageLiteral(resourceName: "photo_placeholder"),options: .continueInBackground)
             }
             self?.barsStackView.arrangedSubviews.forEach { v in
                 v.backgroundColor = self?.barDeselectedColor

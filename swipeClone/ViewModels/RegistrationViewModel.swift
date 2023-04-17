@@ -35,6 +35,12 @@ final class RegistrationViewModel {
         }
     }
     
+     
+func checkFormValidity() {
+        let isFormValid = fullName?.isEmpty  == false && email?.isEmpty == false && password?.isEmpty == false && bindableImage.value != nil
+        bindableIsFormValid.value = isFormValid
+    }
+    
     func performRegistration(completion: @escaping (Error?) -> ()) {
         guard let email = email, let password = password else {return}
         self.bindableIsRegistering.value = true
@@ -81,7 +87,14 @@ final class RegistrationViewModel {
     
     fileprivate func saveInfoToFireStore(imageUrl: String, completion: @escaping (Error?) -> ()) {
         let uid = Auth.auth().currentUser?.uid ?? ""
-        let docData = ["fullName" : fullName ?? "", "uid" : uid, "imageUrl1": imageUrl]
+        let docData: [String: Any] = [
+            "fullName" : fullName ?? "",
+            "uid" : uid,
+            "imageUrl1": imageUrl,
+            "age": 18,
+            "minSeekingAge": SettingsController.defaultMinSeekingAge,
+            "maxSeekingAge": SettingsController.defaultMaxSeekingAge
+        ]
         Firestore.firestore().collection("users").document(uid).setData(docData) { error in
             if let error = error {
                 completion(error)
@@ -91,10 +104,7 @@ final class RegistrationViewModel {
         }
     }
     
-    fileprivate func checkFormValidity() {
-        let isFormValid = fullName?.isEmpty  == false && email?.isEmpty == false && password?.isEmpty == false
-        bindableIsFormValid.value = isFormValid
-    }
+
 
    
 }
