@@ -10,24 +10,17 @@ import SDWebImage
 
 protocol CardViewDelegate {
     func didTapMoreInfo(cardViewModel: CardViewModel)
+    func  didRemoveCard(cardView: CardView)
 }
 
 final class CardView: UIView {
+    
+    var nextCardView: CardView?
     
     var delegate: CardViewDelegate?
     
     var cardViewModel: CardViewModel! {
         didSet {
-  //          let imageName = cardViewModel.imageUrls.first ?? ""
-            //load image from url
-//             let url = URL(string: imageName)
-             
-                
-//                self.imageView.sd_setImage(
-//                    with: url,
-//                    placeholderImage: #imageLiteral(resourceName: "photo_placeholder"),
-//                    options: .continueInBackground
-//                )
             swipingPhotosController.cardViewModel = cardViewModel
             
             informationLabel.attributedText = cardViewModel.attributedString
@@ -66,7 +59,7 @@ final class CardView: UIView {
         setupLayout()
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
         addGestureRecognizer(panGesture)
-        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap)))
+       addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap)))
         
     }
     
@@ -104,14 +97,8 @@ final class CardView: UIView {
         
         
         let swipingPhotosView = swipingPhotosController.view!
-        //imageView.contentMode = .scaleAspectFill
-        //addSubview(imageView)
         addSubview(swipingPhotosView)
-        //imageView.fillSuperview()
         swipingPhotosView.fillSuperview()
-        
-        
-      //  setupBarStackView()
         
         setupGradientLayer()
         
@@ -125,17 +112,6 @@ final class CardView: UIView {
         moreInfoButton.anchor(top: nil, leading: nil, bottom: bottomAnchor, trailing: trailingAnchor, padding: .init(top: 0, left: 0, bottom: 16, right: 16), size: .init(width: 44, height: 44))
         
     }
-
-    
-    fileprivate func setupBarStackView() {
-        addSubview(barsStackView)
-        barsStackView.anchor(top: topAnchor, leading: leadingAnchor, bottom: nil, trailing: trailingAnchor, padding: UIEdgeInsets(top: 8, left: 8, bottom: 0, right: 8), size: .init(width: 0, height: 4))
-        //dummy bars
-        barsStackView.spacing = 4
-        barsStackView.distribution = .fillEqually
-        
-    }
-    
     
     fileprivate func setupImageIndexObserver() {
         cardViewModel.imageIndexObserver = { [weak self] index,imageUrl in
@@ -201,6 +177,9 @@ final class CardView: UIView {
             self.transform = .identity
             if shouldDismissCard {
                 self.removeFromSuperview()
+                
+                // reset top card view in homecontroller
+                self.delegate?.didRemoveCard(cardView: self)
             }
         }
     }

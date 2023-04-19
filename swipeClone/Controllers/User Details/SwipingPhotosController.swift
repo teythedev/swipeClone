@@ -15,6 +15,7 @@ class SwipingPhotosController: UIPageViewController, UIPageViewControllerDataSou
                 let photoController = PhotoController(imageUrl: imageUrl)
                 return photoController
             })
+            
             setViewControllers([controllers.first!], direction: .forward, animated: false)
             
             setupBarViews()
@@ -76,6 +77,40 @@ class SwipingPhotosController: UIPageViewController, UIPageViewControllerDataSou
         view.backgroundColor = .systemBackground
         dataSource = self
         delegate = self
+        
+        if isCardViewMode {
+            disableSwipingAbility()
+        }
+        
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap)))
+    }
+    
+    @objc fileprivate func handleTap(gesture: UITapGestureRecognizer) {
+        print("Cycle through photohand")
+        let currentController = viewControllers!.first!
+        if let index = controllers.firstIndex(of: currentController) {
+            barStackView.arrangedSubviews.forEach {$0.backgroundColor = deselectedBarColor }
+            if gesture.location(in: self.view).x > view.frame.width / 2 {
+                let nextIndex = min(index + 1, controllers.count - 1)
+                let nextController = controllers[nextIndex]
+                setViewControllers([nextController], direction: .forward, animated: true)
+                barStackView.arrangedSubviews[nextIndex].backgroundColor = .white
+            } else {
+                let previousIndex = max( 0,index - 1)
+                let previousController = controllers[previousIndex]
+                setViewControllers([previousController], direction: .reverse, animated: true)
+                barStackView.arrangedSubviews[previousIndex].backgroundColor = .white
+            }
+            
+        }
+    }
+    
+    fileprivate func disableSwipingAbility() {
+        view.subviews.forEach { v in
+            if let v = v as? UIScrollView {
+                v.isScrollEnabled = false
+            }
+        }
     }
     
     

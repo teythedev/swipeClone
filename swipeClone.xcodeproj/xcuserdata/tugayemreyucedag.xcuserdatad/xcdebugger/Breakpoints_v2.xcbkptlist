@@ -3,4 +3,54 @@
    uuid = "64C9EDEF-BCD0-4DD1-8632-2978B6BC9ED6"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "EEFF6A34-8853-4085-BAEE-D892C7C044CB"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "swipeClone/Views/CardView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "188"
+            endingLineNumber = "188"
+            landmarkName = "handleTap(gesture:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "EEFF6A34-8853-4085-BAEE-D892C7C044CB - bcf3aa8239729801"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "swipeClone.CardView.handleTap(gesture: __C.UITapGestureRecognizer) -&gt; ()"
+                  moduleName = "swipeClone"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/tugayemreyucedag/Projects/swipeClone/swipeClone/Views/CardView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "188"
+                  endingLineNumber = "188"
+                  offsetFromSymbolStart = "464">
+               </Location>
+               <Location
+                  uuid = "EEFF6A34-8853-4085-BAEE-D892C7C044CB - bcf3aa8239729801"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "swipeClone.CardView.handleTap(gesture: __C.UITapGestureRecognizer) -&gt; ()"
+                  moduleName = "swipeClone"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/tugayemreyucedag/Projects/swipeClone/swipeClone/Views/CardView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "188"
+                  endingLineNumber = "188"
+                  offsetFromSymbolStart = "112">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>
