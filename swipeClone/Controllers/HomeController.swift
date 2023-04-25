@@ -29,7 +29,7 @@ final class HomeController: UIViewController {
     let topStackView = TopNavigationStackView()
     let cardsDeckView = UIView()
     let bottomControls = HomeBottomControlsStackView()
-        
+    
     var cardViewModels = [CardViewModel]()
     
     override func viewDidLoad() {
@@ -47,7 +47,7 @@ final class HomeController: UIViewController {
         fetchCurrentUser()
         //fetchUsersFromFireStore()
     }
-
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if Auth.auth().currentUser == nil {
@@ -58,16 +58,16 @@ final class HomeController: UIViewController {
             present(navController, animated: true)
         }
     }
-
+    
     
     // MARK: - Setup
     
     fileprivate var user: User?
     
     fileprivate func fetchCurrentUser() {
-       AuthService.shared.getCurrentUser(completion: { user in
-           self.user = user
-           self.fetchUsersFromFireStore()
+        AuthService.shared.getCurrentUser(completion: { user in
+            self.user = user
+            self.fetchUsersFromFireStore()
         })
     }
     
@@ -87,10 +87,10 @@ final class HomeController: UIViewController {
         overallStackView.bringSubviewToFront(cardsDeckView)
     }
     
-
+    
     fileprivate var lastFetchUser: User?
     fileprivate func fetchUsersFromFireStore() {
-       // guard let minAge = user?.minSeekingAge, let maxAge = user?.maxSeekingAge else {return}
+        // guard let minAge = user?.minSeekingAge, let maxAge = user?.maxSeekingAge else {return}
         let hud = JGProgressHUD(style: .dark)
         hud.textLabel.text = "Fetching Users"
         hud.show(in: view)
@@ -104,7 +104,7 @@ final class HomeController: UIViewController {
             hud.dismiss()
             if let error = error {
                 print("Failed to fetch users: \(error.localizedDescription)")
-                    return
+                return
             }
             
             //set next card view realationship for all card
@@ -129,24 +129,36 @@ final class HomeController: UIViewController {
     var topCardView: CardView?
     
     @objc fileprivate func handleLike() {
-        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.1, options: .curveEaseOut) {
-            self.topCardView?.frame = CGRect(
-                x: 600 ,
-                y: 0,
-                width: self.topCardView!.frame.width,
-                height: self.topCardView!.frame.height
-            )
-            let angle = 15 * CGFloat.pi / 180
-            self.topCardView?.transform = CGAffineTransform(rotationAngle: angle)
-        } completion: { (_) in
+        let translationAnimation = CABasicAnimation(keyPath: "position.x")
+        translationAnimation.toValue = 700
+        translationAnimation.duration = 1
+        translationAnimation.fillMode = .forwards
+        translationAnimation.isRemovedOnCompletion = false
+        
+        CATransaction.setCompletionBlock {
             self.topCardView?.removeFromSuperview()
             self.topCardView = self.topCardView?.nextCardView
         }
         
-
+        // TODO: - CABasicAnimation card fixes -6.44
         
-       
-
+        topCardView?.layer.add(translationAnimation, forKey: "translation")
+        
+        CATransaction.commit()
+        
+        //        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.1, options: .curveEaseOut) {
+        //            self.topCardView?.frame = CGRect(
+        //                x: 600 ,
+        //                y: 0,
+        //                width: self.topCardView!.frame.width,
+        //                height: self.topCardView!.frame.height
+        //            )
+        //            let angle = 15 * CGFloat.pi / 180
+        //            self.topCardView?.transform = CGAffineTransform(rotationAngle: angle)
+        //        } completion: { (_) in
+        //            self.topCardView?.removeFromSuperview()
+        //            self.topCardView = self.topCardView?.nextCardView
+        //        }z
     }
     
     fileprivate func setupCardFromUser(user: User) -> CardView {
@@ -174,12 +186,12 @@ final class HomeController: UIViewController {
     }
     
     @objc fileprivate func handleRefresh() {
-            fetchUsersFromFireStore()
+        fetchUsersFromFireStore()
     }
     
-
     
-   
+    
+    
 }
 
 extension HomeController: CardViewDelegate {
